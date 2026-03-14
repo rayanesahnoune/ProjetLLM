@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ITRIA — Connexion</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=IBM+Plex+Sans:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+
+   :root {
+      --bg:      #eef2fa; 
+      --white:   #ffffff; 
+      --ink:     #0b132b; 
+      --soft:    #4c6a9c; 
+      --border:  #cdd7e8; 
+      --accent:  #5c88c4; 
+      --gold:    #fde047; 
+      --radius:  10px;
+    }
+    html, body {
+      height: 100%;
+      font-family:'Courier New', Courier, monospace ;
+      background: var(--bg);
+      color: var(--ink);
+    }
+
+    .page {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    /* ── GAUCHE ── */
+    .left {
+      background: var(--ink);
+      padding: 64px 56px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* étoile décorative en fond, grande et discrète */
+   .bg-star {
+      position: absolute;
+      bottom: -30px;
+      right: -20px;
+      opacity: 0.08; 
+      transform: rotate(15deg);
+      pointer-events: none;
+    }
+    .left-top { position: relative; z-index: 1; }
+
+    /* logo */
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 56px;
+      animation: fadeUp 0.5s ease both;
+    }
+
+    .logo span {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: #ffffff55;
+      letter-spacing: 0.1em;
+    }
+
+    .left h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.6rem;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+      margin-bottom: 18px;
+      animation: fadeUp 0.5s 0.1s ease both;
+    }
+
+    .left h1 em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .left > .left-top > p {
+      font-size: 0.88rem;
+      font-weight: 300;
+      color: #ffffff55;
+      line-height: 1.7;
+      max-width: 340px;
+      animation: fadeUp 0.5s 0.2s ease both;
+    }
+
+    /* liste features */
+    .features {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      animation: fadeUp 0.5s 0.3s ease both;
+    }
+
+    .feature {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+
+    .feat-num {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.68rem;
+      color: var(--gold);
+      margin-top: 2px;
+      letter-spacing: 0.06em;
+      flex-shrink: 0;
+    }
+
+    .feat-text strong {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: #ffffffcc;
+      margin-bottom: 2px;
+    }
+
+    .feat-text span {
+      font-size: 0.74rem;
+      font-weight: 300;
+      color: #ffffff44;
+    }
+
+    /* ── DROITE ── */
+    .right {
+      background: var(--white);
+      padding: 64px 56px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    /* étoile SVG dessinée */
+    .star-wrap {
+      margin-bottom: 28px;
+      animation: fadeUp 0.5s 0.1s ease both;
+    }
+
+    .form-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: var(--ink);
+      letter-spacing: -0.02em;
+      margin-bottom: 6px;
+      animation: fadeUp 0.5s 0.15s ease both;
+    }
+
+    .form-sub {
+      font-size: 0.82rem;
+      font-weight: 300;
+      color: #aaa;
+      margin-bottom: 36px;
+      animation: fadeUp 0.5s 0.2s ease both;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 18px;
+      animation: fadeUp 0.5s ease both;
+    }
+
+    .field:nth-of-type(1) { animation-delay: 0.22s; }
+    .field:nth-of-type(2) { animation-delay: 0.27s; }
+
+    .field label {
+      font-size: 0.7rem;
+      font-weight: 500;
+      color: #aaa;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .field input {
+      background: var(--bg);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 12px 14px;
+      font-size: 0.88rem;
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-weight: 300;
+      color: var(--ink);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .field input::placeholder { color: #ccc; }
+
+    .field input:focus {
+      border-color: var(--ink);
+      background: #fff;
+    }
+
+    .error {
+      font-size: 0.76rem;
+      color: #b94040;
+      margin-bottom: 12px;
+      min-height: 18px;
+      animation: fadeUp 0.5s 0.28s ease both;
+    }
+
+    .btn {
+      width: 100%;
+      background: var(--ink);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius);
+      padding: 13px;
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 500;
+      cursor: pointer;
+      letter-spacing: 0.02em;
+      transition: background 0.2s, transform 0.15s;
+      animation: fadeUp 0.5s 0.32s ease both;
+    }
+
+    .btn:hover  { background: #2e2e2e; }
+    .btn:active { transform: scale(0.99); }
+    .btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+    .form-footer {
+      margin-top: 28px;
+      font-size: 0.7rem;
+      color: #ccc;
+      text-align: center;
+      animation: fadeUp 0.5s 0.36s ease both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 720px) {
+      .page  { grid-template-columns: 1fr; }
+      .left  { display: none; }
+      .right { padding: 40px 28px; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ════════ GAUCHE ════════ -->
+  <div class="left">
+
+    <!-- grande étoile en fond décoratif -->
+    <svg class="bg-star" width="500" height="500" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <polygon points="50,5 61,35 95,35 68,57 79,91 50,70 21,91 32,57 5,35 39,35" fill="#fff"/>
+    </svg>
+
+    <div class="left-top">
+      <div class="logo">
+        <!-- petite étoile dans le logo -->
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"
+            fill="none" stroke="#c8a84b" stroke-width="1.5" stroke-linejoin="round"/>
+        </svg>
+        <span>ITRIA </span>
+      </div>
+
+      <h1>ITR<em>IA</em></h1>
+    </div>
+
+   
+  </div>
+
+  <!-- ════════ DROITE ════════ -->
+  <div class="right">
+    
+    <!-- étoile SVG dessinée à la main, seul élément décoratif -->
+    <div class="star-wrap">
+      <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- corps étoile 5 branches -->
+        <polygon
+          points="22,3 26.9,15.8 40.6,15.8 29.8,24.2 33.7,37 22,29.5 10.3,37 14.2,24.2 3.4,15.8 17.1,15.8"
+          fill="none"
+          stroke="#1a1a1a"
+          stroke-width="1.4"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </div>
+
+    <h2 class="form-title">Connexion</h2>
+    <p class="form-sub">Accédez à notre modèle ITRIA.</p>
+
+    <div class="field">
+      <label>Identifiant</label>
+      <input type="text" id="username" placeholder="ex : admin" autocomplete="off"/>
+    </div>
+
+    <div class="field">
+      <label>Mot de passe</label>
+      <input type="password" id="password" placeholder="••••••••"/>
+    </div>
+
+    <div class="error" id="error"></div>
+
+    <button class="btn" id="btn" onclick="login()">Se connecter</button>
+
+  </div>
+
+</div>
+
+<script>
+  async function login() {
+    const username = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value;
+    const errEl    = document.getElementById('error');
+    const btn      = document.getElementById('btn');
+
+    errEl.textContent = '';
+
+    if (!username || !password) {
+      errEl.textContent = 'Veuillez remplir tous les champs.';
+      return;
+    }
+
+    btn.disabled    = true;
+    btn.textContent = 'Connexion...';
+
+    try {
+      const res  = await fetch('/login', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ username, password })
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        btn.textContent = 'Connecté ✓';
+        setTimeout(() => { window.location.href = '/chat'; }, 450);
+      } else {
+        errEl.textContent = data.error || 'Identifiant ou mot de passe incorrect.';
+        btn.disabled    = false;
+        btn.textContent = 'Se connecter';
+      }
+    } catch {
+      errEl.textContent = 'Serveur introuvable. Lance app.py !';
+      btn.disabled    = false;
+      btn.textContent = 'Se connecter';
+    }
+  }
+
+  document.addEventListener('keydown', e => { if (e.key === 'Enter') login(); });
+</script>
+</body>
+</html>
