@@ -4,307 +4,326 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>ITRIA — Connexion</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=IBM+Plex+Sans:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-
-   :root {
-      --bg:      #eef2fa; 
-      --white:   #ffffff; 
-      --ink:     #0b132b; 
-      --soft:    #4c6a9c; 
-      --border:  #cdd7e8; 
-      --accent:  #5c88c4; 
-      --gold:    #fde047; 
-      --radius:  10px;
+    :root {
+      --bg:            #f2f2f7;
+      --surface:       rgba(255,255,255,0.85);
+      --surface-solid: #ffffff;
+      --separator:     rgba(60,60,67,0.12);
+      --label:         #1c1c1e;
+      --label-2:       #3c3c43;
+      --label-3:       rgba(60,60,67,0.55);
+      --label-4:       rgba(60,60,67,0.28);
+      --gold:          #b8960c;
+      --gold-light:    #e8c133;
+      --gold-fill:     rgba(232,193,51,0.13);
+      --font:          'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-display:  'DM Serif Display', Georgia, serif;
     }
+
     html, body {
       height: 100%;
-      font-family:'Courier New', Courier, monospace ;
+      font-family: var(--font);
       background: var(--bg);
-      color: var(--ink);
+      color: var(--label);
+      -webkit-font-smoothing: antialiased;
     }
 
-    .page {
-      min-height: 100vh;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-    }
-
-    /* ── GAUCHE ── */
-    .left {
-      background: var(--ink);
-      padding: 64px 56px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      position: relative;
-      overflow: hidden;
-    }
-
-    /* étoile décorative en fond, grande et discrète */
-   .bg-star {
-      position: absolute;
-      bottom: -30px;
-      right: -20px;
-      opacity: 0.08; 
-      transform: rotate(15deg);
+    /* ── SVG background ── */
+    .bg-svg {
+      position: fixed; inset: 0; z-index: 0;
+      width: 100%; height: 100%;
       pointer-events: none;
     }
-    .left-top { position: relative; z-index: 1; }
 
-    /* logo */
-    .logo {
+    /* ── Page centrée ── */
+    .page {
+      position: relative; z-index: 1;
+      min-height: 100vh;
       display: flex;
+      flex-direction: column;
       align-items: center;
-      gap: 10px;
-      margin-bottom: 56px;
-      animation: fadeUp 0.5s ease both;
-    }
-
-    .logo span {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.78rem;
-      font-weight: 500;
-      color: #ffffff55;
-      letter-spacing: 0.1em;
-    }
-
-    .left h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: 2.6rem;
-      font-weight: 700;
-      color: #fff;
-      line-height: 1.2;
-      letter-spacing: -0.02em;
-      margin-bottom: 18px;
-      animation: fadeUp 0.5s 0.1s ease both;
-    }
-
-    .left h1 em {
-      font-style: italic;
-      color: var(--gold);
-    }
-
-    .left > .left-top > p {
-      font-size: 0.88rem;
-      font-weight: 300;
-      color: #ffffff55;
-      line-height: 1.7;
-      max-width: 340px;
-      animation: fadeUp 0.5s 0.2s ease both;
-    }
-
-    /* liste features */
-    .features {
-      position: relative;
-      z-index: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      animation: fadeUp 0.5s 0.3s ease both;
-    }
-
-    .feature {
-      display: flex;
-      align-items: flex-start;
-      gap: 14px;
-    }
-
-    .feat-num {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.68rem;
-      color: var(--gold);
-      margin-top: 2px;
-      letter-spacing: 0.06em;
-      flex-shrink: 0;
-    }
-
-    .feat-text strong {
-      display: block;
-      font-size: 0.82rem;
-      font-weight: 500;
-      color: #ffffffcc;
-      margin-bottom: 2px;
-    }
-
-    .feat-text span {
-      font-size: 0.74rem;
-      font-weight: 300;
-      color: #ffffff44;
-    }
-
-    /* ── DROITE ── */
-    .right {
-      background: var(--white);
-      padding: 64px 56px;
-      display: flex;
-      flex-direction: column;
       justify-content: center;
+      padding: 32px 20px;
     }
 
-    /* étoile SVG dessinée */
-    .star-wrap {
-      margin-bottom: 28px;
-      animation: fadeUp 0.5s 0.1s ease both;
+    /* ── Logo en haut ── */
+    .top-logo {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 52px;
+      display: flex; align-items: center; padding: 0 24px;
+      background: var(--surface);
+      backdrop-filter: blur(24px) saturate(1.8);
+      -webkit-backdrop-filter: blur(24px) saturate(1.8);
+      border-bottom: 1px solid var(--separator);
+      z-index: 10;
+    }
+    .logo-text {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      color: var(--label);
+      letter-spacing: -0.01em;
+    }
+    .logo-text em { color: var(--gold); font-style: italic; }
+
+    /* ── Carte principale ── */
+    .card {
+      width: 100%;
+      max-width: 380px;
+      background: var(--surface-solid);
+      border-radius: 20px;
+      border: 1px solid var(--separator);
+      padding: 40px 36px 36px;
+      box-shadow:
+        0 2px 4px rgba(0,0,0,0.04),
+        0 8px 32px rgba(0,0,0,0.06),
+        0 0 0 0.5px rgba(255,255,255,0.8) inset;
+
+      /* Animation d'entrée */
+      animation: rise 0.5s cubic-bezier(0.22,1,0.36,1) both;
     }
 
-    .form-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.8rem;
-      font-weight: 600;
-      color: var(--ink);
-      letter-spacing: -0.02em;
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(18px) scale(0.98); }
+      to   { opacity: 1; transform: translateY(0)    scale(1);    }
+    }
+
+    /* ── Icône étoile ── */
+    .card-icon {
+      width: 52px; height: 52px;
+      background: linear-gradient(150deg, var(--gold-light), var(--gold));
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 18px rgba(184,150,12,0.25);
+      margin-bottom: 24px;
+    }
+
+    /* ── Titres ── */
+    .card-title {
+      font-family: var(--font-display);
+      font-size: 1.65rem; font-weight: 400;
+      color: var(--label);
+      letter-spacing: -0.025em;
+      line-height: 1.2;
       margin-bottom: 6px;
-      animation: fadeUp 0.5s 0.15s ease both;
+    }
+    .card-title em { font-style: italic; color: var(--gold); }
+
+    .card-sub {
+      font-size: 0.85rem; font-weight: 300;
+      color: var(--label-3);
+      margin-bottom: 32px;
+      line-height: 1.5;
     }
 
-    .form-sub {
-      font-size: 0.82rem;
-      font-weight: 300;
-      color: #aaa;
-      margin-bottom: 36px;
-      animation: fadeUp 0.5s 0.2s ease both;
-    }
-
+    /* ── Champs ── */
     .field {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      margin-bottom: 18px;
-      animation: fadeUp 0.5s ease both;
+      display: flex; flex-direction: column; gap: 6px;
+      margin-bottom: 12px;
     }
-
-    .field:nth-of-type(1) { animation-delay: 0.22s; }
-    .field:nth-of-type(2) { animation-delay: 0.27s; }
 
     .field label {
-      font-size: 0.7rem;
-      font-weight: 500;
-      color: #aaa;
+      font-size: 0.67rem; font-weight: 600;
+      color: var(--label-3);
       text-transform: uppercase;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.09em;
     }
 
     .field input {
       background: var(--bg);
-      border: 1.5px solid var(--border);
-      border-radius: var(--radius);
-      padding: 12px 14px;
-      font-size: 0.88rem;
-      font-family: 'IBM Plex Sans', sans-serif;
-      font-weight: 300;
-      color: var(--ink);
+      border: 1px solid var(--separator);
+      border-radius: 12px;
+      padding: 12px 16px;
+      font-size: 0.9rem;
+      font-family: var(--font); font-weight: 400;
+      color: var(--label);
       outline: none;
-      transition: border-color 0.2s;
+      transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+      -webkit-appearance: none;
     }
-
-    .field input::placeholder { color: #ccc; }
-
+    .field input::placeholder { color: var(--label-4); }
     .field input:focus {
-      border-color: var(--ink);
+      border-color: rgba(184,150,12,0.45);
+      box-shadow: 0 0 0 3px rgba(184,150,12,0.08);
       background: #fff;
     }
 
+    /* ── Erreur ── */
     .error {
-      font-size: 0.76rem;
-      color: #b94040;
+      font-size: 0.75rem;
+      color: #c0392b;
+      min-height: 16px;
       margin-bottom: 12px;
-      min-height: 18px;
-      animation: fadeUp 0.5s 0.28s ease both;
+      padding-left: 2px;
+      opacity: 0;
+      transform: translateY(-4px);
+      transition: opacity 0.2s, transform 0.2s;
     }
+    .error.visible { opacity: 1; transform: translateY(0); }
 
+    /* ── Bouton ── */
     .btn {
-      width: 100%;
-      background: var(--ink);
-      color: #fff;
-      border: none;
-      border-radius: var(--radius);
-      padding: 13px;
-      font-family: 'IBM Plex Sans', sans-serif;
-      font-size: 0.88rem;
-      font-weight: 500;
-      cursor: pointer;
-      letter-spacing: 0.02em;
-      transition: background 0.2s, transform 0.15s;
-      animation: fadeUp 0.5s 0.32s ease both;
+      width: 100%; height: 46px;
+      background: var(--label); color: #fff;
+      border: none; border-radius: 12px;
+      font-family: var(--font); font-size: 0.9rem; font-weight: 500;
+      cursor: pointer; letter-spacing: 0.01em;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      transition: background 0.16s, transform 0.12s, box-shadow 0.16s;
+      box-shadow: 0 2px 8px rgba(28,28,30,0.18);
     }
+    .btn:hover  { background: #2c2c2e; box-shadow: 0 4px 16px rgba(28,28,30,0.22); }
+    .btn:active { transform: scale(0.97); }
+    .btn:disabled { opacity: 0.38; cursor: not-allowed; transform: none; }
 
-    .btn:hover  { background: #2e2e2e; }
-    .btn:active { transform: scale(0.99); }
-    .btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    /* Spinner dans le bouton */
+    .spinner {
+      width: 14px; height: 14px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      display: none;
+    }
+    .btn.loading .spinner { display: block; }
+    .btn.loading .btn-label { display: none; }
+    @keyframes spin { to { transform: rotate(360deg); } }
 
-    .form-footer {
-      margin-top: 28px;
-      font-size: 0.7rem;
-      color: #ccc;
+    /* ── Caption bas de carte ── */
+    .card-caption {
+      font-size: 0.62rem;
+      color: var(--label-4);
       text-align: center;
-      animation: fadeUp 0.5s 0.36s ease both;
+      margin-top: 20px;
+      line-height: 1.5;
     }
 
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(12px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    @media (max-width: 720px) {
-      .page  { grid-template-columns: 1fr; }
-      .left  { display: none; }
-      .right { padding: 40px 28px; }
+    /* ── Séparateur décoratif ── */
+    .divider {
+      height: 1px;
+      background: var(--separator);
+      margin: 24px 0 20px;
     }
   </style>
 </head>
 <body>
+
+<!-- SVG background — gold line art -->
+<svg class="bg-svg" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Gradient pour les traînées — s'estompe vers la droite -->
+    <linearGradient id="trail1" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%"   stop-color="#b8960c" stop-opacity="0.0"/>
+      <stop offset="20%"  stop-color="#b8960c" stop-opacity="0.55"/>
+      <stop offset="70%"  stop-color="#b8960c" stop-opacity="0.28"/>
+      <stop offset="100%" stop-color="#b8960c" stop-opacity="0.0"/>
+    </linearGradient>
+    <linearGradient id="trail2" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%"   stop-color="#b8960c" stop-opacity="0.0"/>
+      <stop offset="15%"  stop-color="#b8960c" stop-opacity="0.45"/>
+      <stop offset="65%"  stop-color="#b8960c" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#b8960c" stop-opacity="0.0"/>
+    </linearGradient>
+    <linearGradient id="trail3" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%"   stop-color="#b8960c" stop-opacity="0.0"/>
+      <stop offset="25%"  stop-color="#b8960c" stop-opacity="0.35"/>
+      <stop offset="60%"  stop-color="#b8960c" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#b8960c" stop-opacity="0.0"/>
+    </linearGradient>
+    <linearGradient id="trail4" x1="0%" y1="0%" x2="80%" y2="0%">
+      <stop offset="0%"   stop-color="#b8960c" stop-opacity="0.0"/>
+      <stop offset="30%"  stop-color="#b8960c" stop-opacity="0.4"/>
+      <stop offset="80%"  stop-color="#b8960c" stop-opacity="0.0"/>
+    </linearGradient>
+    <linearGradient id="trail5" x1="0%" y1="0%" x2="70%" y2="0%">
+      <stop offset="0%"   stop-color="#b8960c" stop-opacity="0.0"/>
+      <stop offset="20%"  stop-color="#b8960c" stop-opacity="0.22"/>
+      <stop offset="70%"  stop-color="#b8960c" stop-opacity="0.0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- ── Traînées comète — gauche vers droite, légèrement courbées ── -->
+  <!-- Traînée principale, épaisse -->
+  <path d="M -20 310 Q 300 295 780 330 Q 1100 355 1460 340"
+        fill="none" stroke="url(#trail1)" stroke-width="1.4" stroke-linecap="round"/>
+  <!-- Traînée secondaire, proche -->
+  <path d="M -20 328 Q 280 312 760 348 Q 1080 370 1460 358"
+        fill="none" stroke="url(#trail2)" stroke-width="0.9" stroke-linecap="round"/>
+  <!-- Traînée fine au-dessus -->
+  <path d="M 30 288 Q 320 272 800 308 Q 1120 330 1460 318"
+        fill="none" stroke="url(#trail3)" stroke-width="0.7" stroke-linecap="round"/>
+  <!-- Traînée très fine, légèrement inclinée -->
+  <path d="M -20 350 Q 200 338 680 368 Q 980 385 1350 375"
+        fill="none" stroke="url(#trail4)" stroke-width="0.6" stroke-linecap="round"/>
+  <!-- Traînée courte en haut -->
+  <path d="M 60 268 Q 260 255 600 272 Q 820 282 1020 275"
+        fill="none" stroke="url(#trail5)" stroke-width="0.5" stroke-linecap="round"/>
+  <!-- Petit sillage en bas à gauche -->
+  <path d="M -20 390 Q 150 382 420 394 Q 580 400 740 396"
+        fill="none" stroke="#b8960c" stroke-width="0.5" stroke-linecap="round" opacity="0.15"/>
+
+  <!-- ── Étoiles cristal 4 branches (bas droite) ── -->
+  <!-- Grande étoile -->
+  <g transform="translate(1270, 690)">
+    <line x1="0" y1="-44" x2="0" y2="44"  stroke="#b8960c" stroke-width="0.9" stroke-linecap="round" opacity="0.55"/>
+    <line x1="-44" y1="0" x2="44" y2="0"  stroke="#b8960c" stroke-width="0.9" stroke-linecap="round" opacity="0.55"/>
+    <line x1="-18" y1="-18" x2="18" y2="18" stroke="#b8960c" stroke-width="0.5" stroke-linecap="round" opacity="0.3"/>
+    <line x1="18" y1="-18" x2="-18" y2="18" stroke="#b8960c" stroke-width="0.5" stroke-linecap="round" opacity="0.3"/>
+    <!-- Losange intérieur -->
+    <path d="M 0 -20 L 12 0 L 0 20 L -12 0 Z" fill="none" stroke="#b8960c" stroke-width="0.6" opacity="0.35"/>
+  </g>
+
+  <!-- Étoile moyenne -->
+  <g transform="translate(1360, 760)">
+    <line x1="0" y1="-28" x2="0" y2="28"  stroke="#b8960c" stroke-width="0.8" stroke-linecap="round" opacity="0.45"/>
+    <line x1="-28" y1="0" x2="28" y2="0"  stroke="#b8960c" stroke-width="0.8" stroke-linecap="round" opacity="0.45"/>
+    <line x1="-11" y1="-11" x2="11" y2="11" stroke="#b8960c" stroke-width="0.45" stroke-linecap="round" opacity="0.25"/>
+    <line x1="11" y1="-11" x2="-11" y2="11" stroke="#b8960c" stroke-width="0.45" stroke-linecap="round" opacity="0.25"/>
+    <path d="M 0 -13 L 8 0 L 0 13 L -8 0 Z" fill="none" stroke="#b8960c" stroke-width="0.5" opacity="0.28"/>
+  </g>
+
+  <!-- Petite étoile -->
+  <g transform="translate(1410, 700)">
+    <line x1="0" y1="-16" x2="0" y2="16"  stroke="#b8960c" stroke-width="0.7" stroke-linecap="round" opacity="0.38"/>
+    <line x1="-16" y1="0" x2="16" y2="0"  stroke="#b8960c" stroke-width="0.7" stroke-linecap="round" opacity="0.38"/>
+    <line x1="-6" y1="-6" x2="6" y2="6"   stroke="#b8960c" stroke-width="0.4" stroke-linecap="round" opacity="0.2"/>
+    <line x1="6" y1="-6" x2="-6" y2="6"   stroke="#b8960c" stroke-width="0.4" stroke-linecap="round" opacity="0.2"/>
+  </g>
+
+  <!-- Toute petite étoile, éloignée -->
+  <g transform="translate(1190, 810)">
+    <line x1="0" y1="-10" x2="0" y2="10"  stroke="#b8960c" stroke-width="0.6" stroke-linecap="round" opacity="0.28"/>
+    <line x1="-10" y1="0" x2="10" y2="0"  stroke="#b8960c" stroke-width="0.6" stroke-linecap="round" opacity="0.28"/>
+    <line x1="-4" y1="-4" x2="4" y2="4"   stroke="#b8960c" stroke-width="0.35" stroke-linecap="round" opacity="0.15"/>
+    <line x1="4" y1="-4" x2="-4" y2="4"   stroke="#b8960c" stroke-width="0.35" stroke-linecap="round" opacity="0.15"/>
+  </g>
+</svg>
+
+<!-- Barre top -->
+<div class="top-logo">
+  <span class="logo-text">ITR<em>IA</em></span>
+</div>
+
+<!-- Carte de login -->
 <div class="page">
+  <div class="card">
 
-  <!-- ════════ GAUCHE ════════ -->
-  <div class="left">
-
-    <!-- grande étoile en fond décoratif -->
-    <svg class="bg-star" width="500" height="500" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <polygon points="50,5 61,35 95,35 68,57 79,91 50,70 21,91 32,57 5,35 39,35" fill="#fff"/>
-    </svg>
-
-    <div class="left-top">
-      <div class="logo">
-        <!-- petite étoile dans le logo -->
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"
-            fill="none" stroke="#c8a84b" stroke-width="1.5" stroke-linejoin="round"/>
-        </svg>
-        <span>ITRIA </span>
-      </div>
-
-      <h1>ITR<em>IA</em></h1>
-    </div>
-
-   
-  </div>
-
-  <!-- ════════ DROITE ════════ -->
-  <div class="right">
-    
-    <!-- étoile SVG dessinée à la main, seul élément décoratif -->
-    <div class="star-wrap">
-      <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <!-- corps étoile 5 branches -->
-        <polygon
-          points="22,3 26.9,15.8 40.6,15.8 29.8,24.2 33.7,37 22,29.5 10.3,37 14.2,24.2 3.4,15.8 17.1,15.8"
-          fill="none"
-          stroke="#1a1a1a"
-          stroke-width="1.4"
-          stroke-linejoin="round"
-        />
+    <div class="card-icon">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
+        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
       </svg>
     </div>
 
-    <h2 class="form-title">Connexion</h2>
-    <p class="form-sub">Accédez à notre modèle ITRIA.</p>
+    <h1 class="card-title">Connexion<br/>à <em>ITRIA</em></h1>
+    <p class="card-sub">Accédez à votre modèle d'IA.</p>
 
     <div class="field">
       <label>Identifiant</label>
-      <input type="text" id="username" placeholder="ex : admin" autocomplete="off"/>
+      <input type="text" id="username" placeholder="ex : admin" autocomplete="off" autofocus/>
     </div>
 
     <div class="field">
@@ -314,53 +333,65 @@
 
     <div class="error" id="error"></div>
 
-    <button class="btn" id="btn" onclick="login()">Se connecter</button>
+    <button class="btn" id="btn" onclick="login()">
+      <span class="btn-label">Se connecter</span>
+      <div class="spinner"></div>
+    </button>
+
+    <div class="divider"></div>
+    <p class="card-caption">ITRIA peut faire des erreurs.<br/>Vérifiez les informations importantes.</p>
 
   </div>
-
 </div>
 
 <script>
-  async function login() {
-    const username = document.getElementById('username').value.trim();
-    const password = document.getElementById('password').value;
-    const errEl    = document.getElementById('error');
-    const btn      = document.getElementById('btn');
+async function login() {
+  const username = document.getElementById('username').value.trim();
+  const password = document.getElementById('password').value;
+  const errEl    = document.getElementById('error');
+  const btn      = document.getElementById('btn');
 
-    errEl.textContent = '';
+  errEl.textContent = '';
+  errEl.classList.remove('visible');
 
-    if (!username || !password) {
-      errEl.textContent = 'Veuillez remplir tous les champs.';
-      return;
-    }
-
-    btn.disabled    = true;
-    btn.textContent = 'Connexion...';
-
-    try {
-      const res  = await fetch('/login', {
-        method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({ username, password })
-      });
-      const data = await res.json();
-
-      if (data.success) {
-        btn.textContent = 'Connecté ✓';
-        setTimeout(() => { window.location.href = '/chat'; }, 450);
-      } else {
-        errEl.textContent = data.error || 'Identifiant ou mot de passe incorrect.';
-        btn.disabled    = false;
-        btn.textContent = 'Se connecter';
-      }
-    } catch {
-      errEl.textContent = 'Serveur introuvable. Lance app.py !';
-      btn.disabled    = false;
-      btn.textContent = 'Se connecter';
-    }
+  if (!username || !password) {
+    errEl.textContent = 'Veuillez remplir tous les champs.';
+    errEl.classList.add('visible');
+    return;
   }
 
-  document.addEventListener('keydown', e => { if (e.key === 'Enter') login(); });
+  btn.disabled = true;
+  btn.classList.add('loading');
+
+  try {
+    const res  = await fetch('/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password })
+    });
+    const data = await res.json();
+
+    if (data.success) {
+      btn.classList.remove('loading');
+      btn.querySelector('.btn-label').style.display = 'block';
+      btn.querySelector('.btn-label').textContent = 'Connecté ✓';
+      btn.style.background = '#2d6a4f';
+      setTimeout(() => { window.location.href = '/chat'; }, 500);
+    } else {
+      errEl.textContent = data.error || 'Identifiant ou mot de passe incorrect.';
+      errEl.classList.add('visible');
+      btn.disabled = false;
+      btn.classList.remove('loading');
+    }
+  } catch {
+    errEl.textContent = 'Serveur introuvable. Lance app.py !';
+    errEl.classList.add('visible');
+    btn.disabled = false;
+    btn.classList.remove('loading');
+  }
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Enter') login(); });
 </script>
 </body>
 </html>
