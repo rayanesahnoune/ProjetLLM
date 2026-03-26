@@ -251,7 +251,7 @@
         <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
       </svg>
     </button>
-    <div class="avatar">AD</div>
+    <div class="avatar">{{ username[:2].upper() if username else "??" }}</div>
   </div>
 </div>
 
@@ -337,12 +337,23 @@
     input.value = ''; input.style.height = 'auto';
     appendMessage('user', escapeHtml(text));
     showTyping();
-    await new Promise(r => setTimeout(r, 800 + Math.random()*600));
-    removeTyping();
-    const r = ["Je suis <strong>ITRIA</strong>. Connectez votre API pour activer les réponses réelles.",
-               "Mode démo actif — branchez votre endpoint LLM pour des réponses complètes.",
-               "L'intégration avec votre modèle est prête à être configurée dans le code."];
-    appendMessage('ai', r[msgCount % r.length]);
+    try {
+      const res = await fetch('/predict', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: text, nb_mots: 5 })
+      });
+      const data = await res.json();
+      removeTyping();
+      if (data.response) {
+        appendMessage('ai', escapeHtml(data.response));
+      } else {
+        appendMessage('ai', '<em>Erreur : ' + escapeHtml(data.error || 'réponse invalide') + '</em>');
+      }
+    } catch (err) {
+      removeTyping();
+      appendMessage('ai', '<em>Erreur de connexion au serveur.</em>');
+    }
   }
 
   function clearChat() {
