@@ -26,7 +26,7 @@ class ProjectSetup:
             os.system(f"git clone {self.repo_url} {self.project_root}")
             print(" Repo cloné")
         else:
-            print("🔄 Mise à jour du repo...")
+            print("Mise à jour du repo...")
             os.system(f"cd {self.project_root} && git pull")
             print(" Repo à jour")
 
