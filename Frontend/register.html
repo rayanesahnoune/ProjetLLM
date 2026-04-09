@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ITRIA — Inscription</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:            #f2f2f7;
+      --surface:       rgba(255,255,255,0.85);
+      --surface-solid: #ffffff;
+      --separator:     rgba(60,60,67,0.12);
+      --label:         #1c1c1e;
+      --label-2:       #3c3c43;
+      --label-3:       rgba(60,60,67,0.55);
+      --label-4:       rgba(60,60,67,0.28);
+      --gold:          #b8960c;
+      --gold-light:    #e8c133;
+      --gold-fill:     rgba(232,193,51,0.13);
+      --font:          'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-display:  'DM Serif Display', Georgia, serif;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--label);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .bg-svg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .top-logo {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      padding: 0 24px;
+      background: var(--surface);
+      backdrop-filter: blur(24px) saturate(1.8);
+      -webkit-backdrop-filter: blur(24px) saturate(1.8);
+      border-bottom: 1px solid var(--separator);
+      z-index: 10;
+    }
+
+    .logo-text {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      color: var(--label);
+      letter-spacing: -0.01em;
+    }
+
+    .logo-text em {
+      color: var(--gold);
+      font-style: italic;
+    }
+
+    .page {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 96px 20px 32px;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 420px;
+      background: var(--surface-solid);
+      border-radius: 20px;
+      border: 1px solid var(--separator);
+      padding: 40px 36px 34px;
+      box-shadow:
+        0 2px 4px rgba(0,0,0,0.04),
+        0 8px 32px rgba(0,0,0,0.06),
+        0 0 0 0.5px rgba(255,255,255,0.8) inset;
+      animation: rise 0.5s cubic-bezier(0.22,1,0.36,1) both;
+    }
+
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(18px) scale(0.98); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .card-icon {
+      width: 52px;
+      height: 52px;
+      background: linear-gradient(150deg, var(--gold-light), var(--gold));
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 18px rgba(184,150,12,0.25);
+      margin-bottom: 24px;
+    }
+
+    .card-title {
+      font-family: var(--font-display);
+      font-size: 1.65rem;
+      font-weight: 400;
+      color: var(--label);
+      letter-spacing: -0.025em;
+      line-height: 1.2;
+      margin-bottom: 6px;
+    }
+
+    .card-title em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .card-sub {
+      font-size: 0.85rem;
+      font-weight: 300;
+      color: var(--label-3);
+      margin-bottom: 28px;
+      line-height: 1.5;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+
+    .field label {
+      font-size: 0.67rem;
+      font-weight: 600;
+      color: var(--label-3);
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+    }
+
+    .field input {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--separator);
+      border-radius: 12px;
+      padding: 12px 16px;
+      font-size: 0.9rem;
+      font-family: var(--font);
+      font-weight: 400;
+      color: var(--label);
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+      -webkit-appearance: none;
+    }
+
+    .field input::placeholder {
+      color: var(--label-4);
+    }
+
+    .field input:focus {
+      border-color: rgba(184,150,12,0.45);
+      box-shadow: 0 0 0 3px rgba(184,150,12,0.08);
+      background: #fff;
+    }
+
+    #message {
+      font-size: 0.75rem;
+      color: #c0392b;
+      min-height: 16px;
+      margin: 2px 0 12px;
+      padding-left: 2px;
+      opacity: 0;
+      transform: translateY(-4px);
+      transition: opacity 0.2s, transform 0.2s;
+    }
+
+    #message.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .btn {
+      width: 100%;
+      height: 46px;
+      background: var(--label);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-family: var(--font);
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      letter-spacing: 0.01em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background 0.16s, transform 0.12s, box-shadow 0.16s;
+      box-shadow: 0 2px 8px rgba(28,28,30,0.18);
+    }
+
+    .btn:hover {
+      background: #2c2c2e;
+      box-shadow: 0 4px 16px rgba(28,28,30,0.22);
+    }
+
+    .btn:active {
+      transform: scale(0.97);
+    }
+
+    .btn:disabled {
+      opacity: 0.38;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .spinner {
+      width: 14px;
+      height: 14px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      display: none;
+    }
+
+    .btn.loading .spinner { display: block; }
+    .btn.loading .btn-label { display: none; }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .divider {
+      height: 1px;
+      background: var(--separator);
+      margin: 24px 0 18px;
+    }
+
+    .bottom-link {
+      text-align: center;
+      font-size: 0.78rem;
+      color: var(--label-3);
+      line-height: 1.5;
+    }
+
+    .bottom-link a {
+      color: var(--label);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .bottom-link a:hover {
+      color: var(--gold);
+    }
+
+    .card-caption {
+      font-size: 0.62rem;
+      color: var(--label-4);
+      text-align: center;
+      margin-top: 18px;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 480px) {
+      .top-logo {
+        padding: 0 18px;
+      }
+
+      .page {
+        padding: 84px 14px 20px;
+      }
+
+      .card {
+        padding: 28px 20px 24px;
+        border-radius: 18px;
+      }
+
+      .card-title {
+        font-size: 1.42rem;
+      }
+
+      .card-icon {
+        width: 48px;
+        height: 48px;
+        margin-bottom: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<svg class="bg-svg" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="trail1" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#b8960c" stop-opacity="0.0"/>
+      <stop offset="20%" stop-color="#b8960c" stop-opacity="0.55"/>
+      <stop offset="70%" stop-color="#b8960c" stop-opacity="0.28"/>
+      <stop offset="100%" stop-color="#b8960c" stop-opacity="0.0"/>
+    </linearGradient>
+    <linearGradient id="trail2" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#b8960c" stop-opacity="0.0"/>
+      <stop offset="15%" stop-color="#b8960c" stop-opacity="0.45"/>
+      <stop offset="65%" stop-color="#b8960c" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#b8960c" stop-opacity="0.0"/>
+    </linearGradient>
+    <linearGradient id="trail3" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#b8960c" stop-opacity="0.0"/>
+      <stop offset="25%" stop-color="#b8960c" stop-opacity="0.35"/>
+      <stop offset="60%" stop-color="#b8960c" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#b8960c" stop-opacity="0.0"/>
+    </linearGradient>
+    <linearGradient id="trail4" x1="0%" y1="0%" x2="80%" y2="0%">
+      <stop offset="0%" stop-color="#b8960c" stop-opacity="0.0"/>
+      <stop offset="30%" stop-color="#b8960c" stop-opacity="0.4"/>
+      <stop offset="80%" stop-color="#b8960c" stop-opacity="0.0"/>
+    </linearGradient>
+    <linearGradient id="trail5" x1="0%" y1="0%" x2="70%" y2="0%">
+      <stop offset="0%" stop-color="#b8960c" stop-opacity="0.0"/>
+      <stop offset="20%" stop-color="#b8960c" stop-opacity="0.22"/>
+      <stop offset="70%" stop-color="#b8960c" stop-opacity="0.0"/>
+    </linearGradient>
+  </defs>
+
+  <path d="M -20 310 Q 300 295 780 330 Q 1100 355 1460 340" fill="none" stroke="url(#trail1)" stroke-width="1.4" stroke-linecap="round"/>
+  <path d="M -20 328 Q 280 312 760 348 Q 1080 370 1460 358" fill="none" stroke="url(#trail2)" stroke-width="0.9" stroke-linecap="round"/>
+  <path d="M 30 288 Q 320 272 800 308 Q 1120 330 1460 318" fill="none" stroke="url(#trail3)" stroke-width="0.7" stroke-linecap="round"/>
+  <path d="M -20 350 Q 200 338 680 368 Q 980 385 1350 375" fill="none" stroke="url(#trail4)" stroke-width="0.6" stroke-linecap="round"/>
+  <path d="M 60 268 Q 260 255 600 272 Q 820 282 1020 275" fill="none" stroke="url(#trail5)" stroke-width="0.5" stroke-linecap="round"/>
+  <path d="M -20 390 Q 150 382 420 394 Q 580 400 740 396" fill="none" stroke="#b8960c" stroke-width="0.5" stroke-linecap="round" opacity="0.15"/>
+
+  <g transform="translate(1270, 690)">
+    <line x1="0" y1="-44" x2="0" y2="44" stroke="#b8960c" stroke-width="0.9" stroke-linecap="round" opacity="0.55"/>
+    <line x1="-44" y1="0" x2="44" y2="0" stroke="#b8960c" stroke-width="0.9" stroke-linecap="round" opacity="0.55"/>
+    <line x1="-18" y1="-18" x2="18" y2="18" stroke="#b8960c" stroke-width="0.5" stroke-linecap="round" opacity="0.3"/>
+    <line x1="18" y1="-18" x2="-18" y2="18" stroke="#b8960c" stroke-width="0.5" stroke-linecap="round" opacity="0.3"/>
+    <polygon points="0,-10 10,0 0,10 -10,0" fill="none" stroke="#b8960c" stroke-width="0.7" opacity="0.45"/>
+  </g>
+
+  <g transform="translate(1188, 760) scale(0.7)">
+    <line x1="0" y1="-30" x2="0" y2="30" stroke="#b8960c" stroke-width="0.85" stroke-linecap="round" opacity="0.42"/>
+    <line x1="-30" y1="0" x2="30" y2="0" stroke="#b8960c" stroke-width="0.85" stroke-linecap="round" opacity="0.42"/>
+    <polygon points="0,-8 8,0 0,8 -8,0" fill="none" stroke="#b8960c" stroke-width="0.55" opacity="0.32"/>
+  </g>
+
+  <g transform="translate(1360, 785) scale(0.45)">
+    <line x1="0" y1="-24" x2="0" y2="24" stroke="#b8960c" stroke-width="0.8" stroke-linecap="round" opacity="0.34"/>
+    <line x1="-24" y1="0" x2="24" y2="0" stroke="#b8960c" stroke-width="0.8" stroke-linecap="round" opacity="0.34"/>
+  </g>
+</svg>
+
+<header class="top-logo">
+  <div class="logo-text">ITR<em>IA</em></div>
+</header>
+
+<main class="page">
+  <section class="card">
+    <div class="card-icon" aria-hidden="true">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+        <path d="M12 3.8l2.05 4.15 4.58.67-3.31 3.23.78 4.56L12 14.26 7.9 16.41l.78-4.56-3.31-3.23 4.58-.67L12 3.8z" fill="white"/>
+      </svg>
+    </div>
+
+    <h1 class="card-title">Créer votre accès <em>ITRIA</em></h1>
+    <p class="card-sub">Rejoignez l’espace conversationnel premium d’ITRIA avec une expérience sobre, élégante et fluide.</p>
+
+    <div class="field">
+      <label for="username">Nom d’utilisateur</label>
+      <input type="text" id="username" placeholder="Entrez votre nom d’utilisateur" autocomplete="username"/>
+    </div>
+
+    <div class="field">
+      <label for="password">Mot de passe</label>
+      <input type="password" id="password" placeholder="Entrez votre mot de passe" autocomplete="new-password"/>
+    </div>
+
+    <div id="message"></div>
+
+    <button class="btn" id="registerBtn" type="button">
+      <span class="spinner"></span>
+      <span class="btn-label">S’inscrire</span>
+    </button>
+
+    <div class="divider"></div>
+
+    <div class="bottom-link">
+      Déjà un compte ?
+      <a href="{{ url_for('login') }}">Se connecter</a>
+    </div>
+
+    <p class="card-caption">ITRIA · Interface conversationnelle augmentée</p>
+  </section>
+</main>
+
+<script>
+  const registerBtn = document.getElementById("registerBtn");
+  const message = document.getElementById("message");
+
+  async function registerUser() {
+    message.textContent = "";
+    message.classList.remove("visible");
+    registerBtn.classList.add("loading");
+    registerBtn.disabled = true;
+
+    const username = document.getElementById("username").value.trim().toLowerCase();
+    const password = document.getElementById("password").value;
+
+    if (!username || !password) {
+      message.textContent = "Veuillez remplir tous les champs.";
+      message.classList.add("visible");
+      registerBtn.classList.remove("loading");
+      registerBtn.disabled = false;
+      return;
+    }
+
+    try {
+      const response = await fetch("{{ url_for('register') }}", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ username, password })
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        window.location.href = "{{ url_for('login') }}";
+        return;
+      }
+
+      message.textContent = data.error || "Erreur lors de l'inscription.";
+      message.classList.add("visible");
+    } catch (error) {
+      message.textContent = "Erreur serveur.";
+      message.classList.add("visible");
+    } finally {
+      registerBtn.classList.remove("loading");
+      registerBtn.disabled = false;
+    }
+  }
+
+  registerBtn.addEventListener("click", registerUser);
+
+  document.addEventListener("keydown", function(e) {
+    if (e.key === "Enter") {
+      registerUser();
+    }
+  });
+</script>
+</body>
+</html>
