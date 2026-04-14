@@ -2,15 +2,15 @@ import tensorflow as tf
 from attention import MultiHeadSimpleAttention
 @tf.keras.utils.register_keras_serializable()
 
-#cette classe est extraite du guide de M P.Poncelet
+#cette classe est extraite du guide de Mr P.Poncelet
 class PositionalEmbedding(tf.keras.layers.Layer):
     def __init__(self, sequence_length, vocab_size, embed_dim, **kwargs):
         super().__init__(**kwargs)
-        self.token_embeddings    = tf.keras.layers.Embedding(input_dim=vocab_size,      output_dim=embed_dim)
+        self.token_embeddings = tf.keras.layers.Embedding(input_dim=vocab_size,      output_dim=embed_dim)
         self.position_embeddings = tf.keras.layers.Embedding(input_dim=sequence_length, output_dim=embed_dim)
         self.sequence_length = sequence_length
-        self.vocab_size      = vocab_size
-        self.embed_dim       = embed_dim
+        self.vocab_size  = vocab_size
+        self.embed_dim  = embed_dim
 
     def call(self, inputs):
         length    = tf.shape(inputs)[-1]
