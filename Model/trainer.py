@@ -2,7 +2,7 @@
 import os
 import tensorflow as tf
 from tensorflow.keras.models import load_model
-from SmallGPT import SmallGPT
+from smallGPT import SmallGPT
 from decoder import PositionalEmbedding, TransformerDecoderBlock
 from attention import SimpleAttention, MultiHeadSimpleAttention
 
