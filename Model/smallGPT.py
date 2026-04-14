@@ -1,6 +1,6 @@
 
 import tensorflow as tf
-from transformer import PositionalEmbedding, TransformerDecoderBlock
+from decoder import PositionalEmbedding, TransformerDecoderBlock
 
 @tf.keras.utils.register_keras_serializable()
 class SmallGPT(tf.keras.Model):
