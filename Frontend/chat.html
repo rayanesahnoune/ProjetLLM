@@ -461,8 +461,7 @@
 
   /* ── Construit la carte de réponse du modèle ── */
   function buildModelCard(data) {
-  const fullSentence = `${data.prompt} ${data.generated.join(' ')}`.trim();
-
+const fullSentence = `${data.prompt} ${data.generated.join(' ')}`.trim();
   return `
     <div class="model-card">
       <div class="model-sentence">
@@ -470,7 +469,6 @@
       </div>
     </div>`;
 }
-
   function appendModelResponse(data) {
     const c = document.getElementById('messages');
     const g = document.createElement('div');
@@ -491,28 +489,50 @@
   }
 
   async function sendMessage() {
-    const input = document.getElementById('chat-input');
-    const text = input.value.trim();
-    if (!text) return;
-    input.value = ''; input.style.height = 'auto';
+  const input = document.getElementById('chat-input');
+  const text = input.value.trim();
+  if (!text) return;
 
-    appendUserBubble(text);
-    showTyping();
+  input.value = '';
+  input.style.height = 'auto';
 
+  appendUserBubble(text);
+  showTyping();
+
+  try {
+    const resp = await fetch('/predict', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt: text, num_words: 5 })
+    });
+
+    let data;
     try {
-      const resp = await fetch('/predict', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt: text, num_words: 5 })
-      });
-      const data = await resp.json();
-      removeTyping();
-      appendModelResponse(data);
-    } catch(e) {
-      removeTyping();
-      appendModelResponse({ error: true, message: 'Erreur réseau — impossible de joindre le modèle.' });
+      data = await resp.json();
+    } catch {
+      throw new Error(`Réponse non JSON du serveur (status ${resp.status})`);
     }
+
+    removeTyping();
+
+    if (!resp.ok) {
+      appendModelResponse({
+        error: true,
+        message: data.message || `Erreur serveur (${resp.status})`
+      });
+      return;
+    }
+
+    appendModelResponse(data);
+
+  } catch (e) {
+    removeTyping();
+    appendModelResponse({
+      error: true,
+      message: `Erreur de connexion au backend : ${e.message}`
+    });
   }
+}
 function logout() {
   window.location.href = "/logout";
 }

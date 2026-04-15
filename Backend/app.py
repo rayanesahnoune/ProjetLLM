@@ -1,39 +1,19 @@
-"""
-app.py  –  Serveur Flask pour SmallGPT.
-
-Routes :
-    GET  /          → redirige vers /chat ou /login
-    GET  /login     → page de connexion
-    POST /login     → authentification (JSON)
-    GET  /register  → page d'inscription
-    POST /register  → création de compte (JSON)
-    GET  /chat      → interface de chat (session requise)
-    GET  /logout    → déconnexion
-    POST /predict   → prédiction du mot suivant (JSON, session requise)
-"""
 
 import os
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 import sqlite3
 from werkzeug.security import generate_password_hash, check_password_hash
 import traceback
-# Chargement du modèle au démarrage (une seule fois)
 from inference import predict_next_word
 
-# ─────────────────────────────────────────────
-# Chemins
-# ─────────────────────────────────────────────
 BASE_DIR  = os.path.dirname(os.path.abspath(__file__))
 FRONTEND  = os.path.abspath(os.path.join(BASE_DIR, "..", "Frontend"))
 DATABASE  = os.path.join(BASE_DIR, "users.db")
 
-# ─────────────────────────────────────────────
-# App Flask
-# ─────────────────────────────────────────────
+
 app = Flask(__name__, template_folder=FRONTEND, static_folder=FRONTEND)
 app.secret_key = os.environ.get("SECRET_KEY", "itria-secret-key-change-me")
 
-# Comptes par défaut créés si absents
 DEFAULT_USERS = {
     "yanis":  "0000",
     "sylia":  "1234",
@@ -41,9 +21,6 @@ DEFAULT_USERS = {
     "itria":  "itria2024",
 }
 
-# ─────────────────────────────────────────────
-# Base de données
-# ─────────────────────────────────────────────
 
 def get_db():
     conn = sqlite3.connect(DATABASE)
@@ -77,13 +54,10 @@ def create_default_users():
         conn.commit()
 
 
-# Initialisation au démarrage
 init_db()
 create_default_users()
 
-# ─────────────────────────────────────────────
-# Routes
-# ─────────────────────────────────────────────
+
 
 @app.route("/")
 def index():
@@ -161,9 +135,8 @@ def logout():
     return redirect(url_for("login"))
 
 
-import traceback  # Ajoute ceci tout en haut avec tes autres imports
+import traceback  
 
-# ... (le reste de ton code app.py) ...
 
 @app.route("/predict", methods=["POST"])
 def predict():
@@ -179,18 +152,14 @@ def predict():
     try:
         next_word = predict_next_word(prompt)
 
-        # --- LA CORRECTION EST ICI : on utilise "generated" sous forme de liste ---
         return jsonify({
             "prompt": prompt,
             "generated": [next_word]
         })
     except Exception as e:
         error_trace = traceback.format_exc()
-        print("💥 ERREUR PYTHON :\n", error_trace)
         return jsonify(error=True, message=f"Erreur serveur : {str(e)}")
 
-# ─────────────────────────────────────────────
-# Lancement
-# ─────────────────────────────────────────────
+
 if __name__ == "__main__":
     app.run(debug=True)
