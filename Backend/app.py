@@ -4,7 +4,7 @@ from flask import Flask, render_template, request, redirect, url_for, session, j
 import sqlite3
 from werkzeug.security import generate_password_hash, check_password_hash
 import traceback
-from inference import predict_next_word
+from inference import predict_next_words
 
 BASE_DIR  = os.path.dirname(os.path.abspath(__file__))
 FRONTEND  = os.path.abspath(os.path.join(BASE_DIR, "..", "Frontend"))
@@ -150,14 +150,26 @@ def predict():
         return jsonify(error=True, message="Prompt vide."), 400
 
     try:
-        next_word = predict_next_word(prompt)
+        generated_words = []
+        current_text = prompt
+        prompt_words = set(prompt.lower().split())  # uniquement les mots du prompt bloqués
+
+        while len(generated_words) < 5:
+            next_word = predict_next_words(current_text)
+            if not next_word:
+                break
+            # Saute uniquement si c'est un mot du prompt original
+            if next_word in prompt_words:
+                current_text = current_text + " " + next_word  # contexte avance quand même
+                continue
+            generated_words.append(next_word)
+            current_text = current_text + " " + next_word
 
         return jsonify({
             "prompt": prompt,
-            "generated": [next_word]
+            "generated": generated_words
         })
     except Exception as e:
-        error_trace = traceback.format_exc()
         return jsonify(error=True, message=f"Erreur serveur : {str(e)}")
 
 
