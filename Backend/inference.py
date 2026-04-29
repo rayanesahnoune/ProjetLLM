@@ -14,13 +14,13 @@ sys.path.append(MODEL_DIR)
 from smallGPT import SmallGPT
 
 
-MODEL_PATH = os.path.join(MODEL_DIR, "best_smallgpt.keras")
+MODEL_PATH = os.path.join(MODEL_DIR, "best_smallgpt_oz.keras")
 MODEL_PATH = os.path.abspath(MODEL_PATH)
 
-FILE_ID = "1UOisS8SlQrKDiLmsNKolxYNYOqQJnkeD"
+FILE_ID = "1Ek-o20d-frKLlQj2NDw5QhGEthpkEClK"
 URL = f"https://drive.google.com/uc?id={FILE_ID}"
 
-MODEL_VERSION = "v2"
+MODEL_VERSION = "v1"
 VERSION_FILE = os.path.join(MODEL_DIR, "model_version.txt")
 
 
@@ -53,7 +53,7 @@ model = tf.keras.models.load_model(
 
 
 
-TOKENIZER_PATH = os.path.join(BASE_DIR, "saved_model", "tokenizer.pkl")
+TOKENIZER_PATH = os.path.join(BASE_DIR, "saved_model", "tokenizer_oz.pkl")
 MAXLEN_PATH = os.path.join(BASE_DIR, "saved_model", "max_sequence_len.npy")
 
 with open(TOKENIZER_PATH, "rb") as f:
