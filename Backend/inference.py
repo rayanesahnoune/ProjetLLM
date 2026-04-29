@@ -17,10 +17,10 @@ from smallGPT import SmallGPT
 MODEL_PATH = os.path.join(MODEL_DIR, "best_smallgpt.keras")
 MODEL_PATH = os.path.abspath(MODEL_PATH)
 
-FILE_ID = "1gjaqX4WS_-uJ3dr-PjiPiDHklBKrduPG"
+FILE_ID = "1UOisS8SlQrKDiLmsNKolxYNYOqQJnkeD"
 URL = f"https://drive.google.com/uc?id={FILE_ID}"
 
-MODEL_VERSION = "v1"
+MODEL_VERSION = "v2"
 VERSION_FILE = os.path.join(MODEL_DIR, "model_version.txt")
 
 
@@ -34,14 +34,14 @@ if os.path.exists(VERSION_FILE):
             need_download = False
 
 if need_download:
-    print("🔄 Téléchargement / mise à jour du modèle...")
+    print("Téléchargement / mise à jour du modèle...")
     os.makedirs(MODEL_DIR, exist_ok=True)
 
     gdown.download(URL, MODEL_PATH, quiet=False)
     with open(VERSION_FILE, "w") as f:
         f.write(MODEL_VERSION)
 
-    print("✅ Modèle prêt.")
+    print(" Modèle prêt.")
 
 
 
@@ -79,3 +79,5 @@ def predict_next_words(prompt):
     for word, index in tokenizer.word_index.items():
         if index == predicted_index:
             return word
+    
+    return None  
