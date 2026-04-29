@@ -152,26 +152,42 @@ def predict():
     try:
         generated_words = []
         current_text = prompt
-        prompt_words = set(prompt.lower().split())  # uniquement les mots du prompt bloqués
+        prompt_words = set(prompt.lower().split())
+        max_attempts = 20
 
         while len(generated_words) < 5:
-            next_word = predict_next_words(current_text)
-            if not next_word:
+            if max_attempts <= 0:
                 break
-            # Saute uniquement si c'est un mot du prompt original
-            if next_word in prompt_words:
-                current_text = current_text + " " + next_word  # contexte avance quand même
+            max_attempts -= 1
+
+            next_word = predict_next_words(current_text)
+
+            # Mot OOV ou None → on glisse la fenêtre de contexte
+            if not next_word:
+                words = current_text.split()
+                if len(words) <= 1:
+                    break  # plus rien à glisser, on arrête
+                current_text = " ".join(words[1:])
                 continue
+
+            # Mot déjà dans le prompt → on avance le contexte sans l'ajouter
+            if next_word.lower() in prompt_words:
+                current_text = current_text + " " + next_word
+                continue
+
             generated_words.append(next_word)
             current_text = current_text + " " + next_word
+
+        if not generated_words:
+            return jsonify(error=True, message="Le modèle n'a pas pu générer de prédiction."), 500
 
         return jsonify({
             "prompt": prompt,
             "generated": generated_words
-        })
+        }), 200
+
     except Exception as e:
-        return jsonify(error=True, message=f"Erreur serveur : {str(e)}")
-
-
+        traceback.print_exc()
+        return jsonify(error=True, message=f"Erreur serveur : {str(e)}"), 500
 if __name__ == "__main__":
     app.run(debug=True)
