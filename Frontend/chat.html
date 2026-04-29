@@ -366,13 +366,16 @@
           </svg>
         </div>
         <h1>Bonjour,<br/>bienvenue sur <em>ITRIA</em></h1>
+        
         <p>Entrez un début de phrase — le modèle <strong>ITRIA</strong> entraîné sur un mini-corpus complétera la suite mot par mot.</p>  
+          
       </div>
+
     </div>
     <div class="input-bar">
       <div class="input-row">
         <div class="input-wrap">
-          <textarea id="chat-input" placeholder="Tapez un prompt (ex: naruto is)…" rows="1"
+          <textarea id="chat-input" placeholder="Tapez une phrase…" rows="1"
                     onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
         </div>
         <button class="send-btn" onclick="sendMessage()">
@@ -493,12 +496,7 @@ function logout() {
         <div class="welcome-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="white"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
         <h1>Bonjour,<br/>bienvenue sur <em>ITRIA</em></h1>
         <p>Entrez un début de phrase — le modèle <strong>SmallGPT</strong> entraîné sur un mini-corpus complétera la suite mot par mot.</p>
-        <div class="suggestion-pills">
-          <span class="pill" onclick="usePrompt('naruto is')">naruto is…</span>
-          <span class="pill" onclick="usePrompt('pride and prejudice is')">pride and prejudice is…</span>
-          <span class="pill" onclick="usePrompt('one piece is')">one piece is…</span>
-          <span class="pill" onclick="usePrompt('harry potter is')">harry potter is…</span>
-        </div>
+
       </div>`;
   }
 
