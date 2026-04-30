@@ -33,6 +33,23 @@ class PositionalEmbedding(tf.keras.layers.Layer):
         return cls(**config)
 @tf.keras.utils.register_keras_serializable()
 class TransformerDecoderBlock(tf.keras.layers.Layer):
+    """Bloc décodeur du Transformer
+         couche MultiHeadSimpleAttention avec masque causal,
+        suivie d'un réseau Feed-Forward. Chaque sous-couche est entourée
+         d'une connexion résiduelle (Add) et d'une normalisation (LayerNorm).
+
+         Attributes:
+        embed_dim: (int) dimension de l'embedding
+        num_heads: (int) nombre de têtes d'attention
+        ff_dim: (int) dimension de la couche Feed-Forward intermédiaire
+        dropout_rate: (float) taux de dropout (Defautlt 0.1)
+        att: (MultiHeadSimpleAttention) couche d'attention
+        ffn: (Sequential) réseau Feed-Forward Dense(ff_dim, relu)->ense(embed_dim)
+        layernorm1: (LayerNormalization) normalisation après l'attention
+        layernorm2: (LayerNormalization) normalisation après le FFN
+        dropout1: (Dropout) dropout après attention
+        dropout2: (Dropout) dropout après le FFN
+             """
     def __init__(self, embed_dim, num_heads, ff_dim, dropout_rate=0.1, **kwargs):
         super().__init__(**kwargs)
         self.embed_dim = embed_dim

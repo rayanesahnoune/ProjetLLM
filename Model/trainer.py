@@ -1,4 +1,4 @@
-# trainer.py
+
 import os
 import tensorflow as tf
 from tensorflow.keras.models import load_model
@@ -24,7 +24,7 @@ class Trainer:
                 restore_best_weights=True,
                 verbose=1
             ),
-            #pour enregistrer le modèle à la fin de chaque epoch si le résultat est le meilleur obtenu
+            #pour enregistrer le modèle à la fin de chaque epoch si le résultat est le meilleur obtenu so far
             tf.keras.callbacks.ModelCheckpoint(
                 self.model_path,
                 monitor='val_loss',

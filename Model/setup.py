@@ -3,6 +3,7 @@ import os
 import sys
 
 class ProjectSetup:
+    """"""    
     def __init__(
         self,
         drive_name = "LLM-Groupe-S",

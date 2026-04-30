@@ -1,4 +1,3 @@
-# data.py
 import re
 import numpy as np
 import requests
@@ -6,6 +5,16 @@ import tensorflow as tf
 from tensorflow.keras.preprocessing.text import Tokenizer
 
 class PrepareData:
+    """Préparation des données textuelles pour l'entrainement:chargement,nettoyage(suppression retour à la ligne et majuscules ,espaces multiples ),
+        tokenisation(avec le tokenizer de keras) et la création de train et validate set 
+        Attributes:
+        sequence_length:(int)longueur des séquences,
+        vocab_size:(int)taille du vocabulaire,
+        validation_split:(float) part des données pour validation,
+        batch_size:(int) nbrs séquences par batch,
+        tokenizer:Tokenizer Keras,
+        index_to_word:(dictionnaire) passage d'un index à un mot 
+    """
     def __init__(self, sequence_length=20, vocab_size=5000,
                  validation_split=0.1, batch_size=32):
         self.sequence_length  = sequence_length
@@ -17,7 +26,7 @@ class PrepareData:
 
     
     def load_from_url(self, url, start_marker=None, end_marker=None):
-        
+        """Recup le dataset depuis url passé en paramétre"""
         response = requests.get(url)
         text = response.text
         if start_marker:
@@ -29,12 +38,13 @@ class PrepareData:
         return text
 
     def load_from_file(self, path):
-        
+        """ charge le texte depuis le Drive si o l'a dja telechargé"""
         with open(path, "r", encoding="utf-8") as f:
             return f.read()
 
     def clean(self, text):
-       
+        """Nettoie le texte passage en minuscules,
+         suppression des retours à la ligne et des espaces multiples. """
         text = text.replace("\r", "").replace("\n", " ")
         text = text.lower()
         text = re.sub(r"\s+", " ", text).strip()
@@ -42,14 +52,15 @@ class PrepareData:
 
     
     def build(self, text):
-       
+        """Tokenisation du texte , création des données de X et Y pour entraînement 
+            dans y on déplace d'un moy à chaque """
         text_clean = self.clean(text)
 
         
         self.tokenizer = Tokenizer(num_words=self.vocab_size, oov_token="<OOV>")
         self.tokenizer.fit_on_texts([text_clean])
 
-        self.vocab_size    = min(len(self.tokenizer.word_index) + 1, self.vocab_size)
+        self.vocab_size  = min(len(self.tokenizer.word_index) + 1, self.vocab_size)
         self.index_to_word = {v: k for k, v in self.tokenizer.word_index.items()}
 
         
@@ -68,10 +79,10 @@ class PrepareData:
 
         assert X.shape == y.shape, f"Shape mismatch: {X.shape} vs {y.shape}"
 
-        print(f" Vocabulaire   : {self.vocab_size} mots")
-        print(f" Séquences     : {len(X)}")
-        print(f" X shape       : {X.shape}")
-        print(f"y shape       : {y.shape}")
+        print(f" Vocabulaire : {self.vocab_size} mots")
+        print(f" Séquences : {len(X)}")
+        print(f" X shape : {X.shape}")
+        print(f"y shape : {y.shape}")
 
         
         dataset = tf.data.Dataset.from_tensor_slices((X, y))
@@ -79,9 +90,9 @@ class PrepareData:
 
         # Split train / val
         dataset_size = sum(1 for _ in dataset)
-        val_size     = int(self.validation_split * dataset_size)
-        train_ds     = dataset.skip(val_size)
-        val_ds       = dataset.take(val_size)
+        val_size  = int(self.validation_split * dataset_size)
+        train_ds = dataset.skip(val_size)
+        val_ds = dataset.take(val_size)
 
         print(f"Batches train : {sum(1 for _ in train_ds)}")
         print(f" Batches val   : {sum(1 for _ in val_ds)}")
@@ -93,8 +104,9 @@ class PrepareData:
         
         return " ".join(self.index_to_word.get(int(i), "?") for i in sequence)
 
+    
     def save_text(self, text, path):
-        
+        """Enregistrement du texte nettoyé dans le drive """
         with open(path, "w", encoding="utf-8") as f:
             f.write(text)
         print(f" Texte sauvegardé : {path}")
