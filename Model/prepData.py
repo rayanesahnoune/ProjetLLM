@@ -99,7 +99,7 @@ class PrepareData:
 
         return train_ds, val_ds
 
-   
+    
     def decode(self, sequence):
         
         return " ".join(self.index_to_word.get(int(i), "?") for i in sequence)

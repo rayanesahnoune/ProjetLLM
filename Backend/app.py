@@ -4,7 +4,7 @@ from flask import Flask, render_template, request, redirect, url_for, session, j
 import sqlite3
 from werkzeug.security import generate_password_hash, check_password_hash
 import traceback
-from inference import predict_next_word
+from inference import predict_next_words
 
 BASE_DIR  = os.path.dirname(os.path.abspath(__file__))
 FRONTEND  = os.path.abspath(os.path.join(BASE_DIR, "..", "Frontend"))
@@ -150,16 +150,44 @@ def predict():
         return jsonify(error=True, message="Prompt vide."), 400
 
     try:
-        next_word = predict_next_word(prompt)
+        generated_words = []
+        current_text = prompt
+        prompt_words = set(prompt.lower().split())
+        max_attempts = 20
+
+        while len(generated_words) < 5:
+            if max_attempts <= 0:
+                break
+            max_attempts -= 1
+
+            next_word = predict_next_words(current_text)
+
+            # Mot OOV ou None → on glisse la fenêtre de contexte
+            if not next_word:
+                words = current_text.split()
+                if len(words) <= 1:
+                    break  # plus rien à glisser, on arrête
+                current_text = " ".join(words[1:])
+                continue
+
+            # Mot déjà dans le prompt → on avance le contexte sans l'ajouter
+            if next_word.lower() in prompt_words:
+                current_text = current_text + " " + next_word
+                continue
+
+            generated_words.append(next_word)
+            current_text = current_text + " " + next_word
+
+        if not generated_words:
+            return jsonify(error=True, message="Le modèle n'a pas pu générer de prédiction."), 500
 
         return jsonify({
             "prompt": prompt,
-            "generated": [next_word]
-        })
+            "generated": generated_words
+        }), 200
+
     except Exception as e:
-        error_trace = traceback.format_exc()
-        return jsonify(error=True, message=f"Erreur serveur : {str(e)}")
-
-
+        traceback.print_exc()
+        return jsonify(error=True, message=f"Erreur serveur : {str(e)}"), 500
 if __name__ == "__main__":
     app.run(debug=True)
