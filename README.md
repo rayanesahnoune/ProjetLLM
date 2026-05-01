@@ -20,24 +20,32 @@ cd ProjetLLM
 pip install tensorflow flask werkzeug numpy requests gdown
 ```
 ### 3. Structure attendue du projet
+### 3. Structure attendue du projet
+
+```text
 ProjetLLM/
 ├── Backend/
 │   ├── app.py
 │   ├── inference.py
-│   ├── saved_model/(tokenizer_oz.pkl et max_sequence_len.npy
-│   │   
-│   └── users.db                ← généré automatiquement
+│   ├── saved_model/
+│   │   ├── tokenizer_oz.pkl
+│   │   └── max_sequence_len.npy
+│   └── users.db                # généré automatiquement
+│
 ├── Model/
 │   ├── smallGPT.py
 │   ├── prepData.py
 │   ├── trainer.py
 │   ├── attention.py
 │   ├── decoder.py
-│   └── best_smallgpt_oz.keras  ← téléchargé automatiquement
+│   └── best_smallgpt_oz.keras  # téléchargé automatiquement
+│
 └── Frontend/
     ├── login.html
     ├── register.html
     └── chat.html
+```
+
 
 
 
