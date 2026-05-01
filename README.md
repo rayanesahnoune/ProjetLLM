@@ -20,7 +20,6 @@ cd ProjetLLM
 pip install tensorflow flask werkzeug numpy requests gdown
 ```
 ### 3. Structure attendue du projet
-### 3. Structure attendue du projet
 
 ```text
 ProjetLLM/
