@@ -57,19 +57,6 @@ cd Backend
 python app.py
 ```
 
-Ouvrir le navigateur sur :
-http://127.0.0.1:5000
-
-
-
-## Comptes disponibles par défaut
-
-| Utilisateur | Mot de passe |
-|-------------|--------------|
-| yanis       | 0000         |
-| sylia       | 1234         |
-| rayane      | 123          |
-| itria       | itria2024    |
 
 ## Notes
 
